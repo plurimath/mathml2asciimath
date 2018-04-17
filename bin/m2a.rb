@@ -6,8 +6,7 @@ while a = gets
   out = ""
   matches.each do |x|
     if /<math/.match? x
-      docxml = Nokogiri::XML(x)
-      out += MathML2AsciiMath.m2a(docxml)
+      out += MathML2AsciiMath.m2a(x)
     else
       out += x
     end

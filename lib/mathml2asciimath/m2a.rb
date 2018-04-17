@@ -4,8 +4,11 @@ require "pp"
 
 module MathML2AsciiMath
 
-  def self.m2a(docxml)
-    parse(docxml.root).gsub(/  /, " ")
+  def self.m2a(x)
+    docxml = Nokogiri::XML(x)
+    parse(docxml.root).gsub(/  /, " ").
+      sub(/^\s+/, "").
+      sub(/\s+$/, "")
   end
 
   def self.encodechars(x)
@@ -15,6 +18,7 @@ module MathML2AsciiMath
       gsub(/\u0393/, "\\Gamma").
       gsub(/\u03b4/, "\\delta").
       gsub(/\u0394/, "\\Delta").
+      gsub(/\u2206/, "\\Delta").
       gsub(/\u03b5/, "\\epsilon").
       gsub(/\u025b/, "\\varepsilon").
       gsub(/\u03b6/, "\\zeta").
@@ -46,6 +50,8 @@ module MathML2AsciiMath
       gsub(/\u03a8/, "\\Psi").
       gsub(/\u03c9/, "\\omega").
       gsub(/\u22c5/, "*").
+      gsub(/\u2219/, "*").
+      gsub(/\u00b7/, "*").
       gsub(/\u2217/, "**").
       gsub(/\u22c6/, "***").
       gsub(/\//, "//").
@@ -143,7 +149,11 @@ module MathML2AsciiMath
       gsub(/\u21a3/, ">->").
       gsub(/\u21a0/, "->>").
       gsub(/\u2916/, ">->>").
-      gsub(/\u21a6/, "|->")
+      gsub(/\u21a6/, "|->").
+      gsub(/\u2026/, "...").
+      gsub(/\u2212/, "-").
+      gsub(/\u2061/, ""). # function application
+      gsub(/\u2751/, "square")
   end
 
   def self.parse(node)
@@ -194,7 +204,7 @@ module MathML2AsciiMath
         op = parse(node.elements[0]).gsub(/ $/, "")
         return "#{op}_#{sub}^#{sup}"
       when "munder"
-        elem1 = parse(node.elements[1])
+        elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
         accent = case elem1
                  when "\u0332" then "ul"
                  when "\u23df" then "ubrace"
@@ -207,7 +217,7 @@ module MathML2AsciiMath
           return "#{accent} #{parse(node.elements[0])}"
         end
       when "mover"
-        elem1 = parse(node.elements[1])
+        elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
         accent = case elem1
                  when "\u005e" then "hat"
                  when "\u00af" then "bar"
@@ -226,6 +236,7 @@ module MathML2AsciiMath
       when "mtable"
         rows = []
         node.children.each { |n| rows << parse(n) }
+        return "[#{rows.join(",")}]"
       when "mtr"
         cols = []
         node.children.each { |n| cols << parse(n) }

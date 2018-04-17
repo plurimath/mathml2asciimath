@@ -4,5 +4,9 @@ Ruby gem to convert MathML into AsciiMath
 
 Ignores style and MathML attributes (other than `mfenced/@open`, `mfenced/@close`, `mo/@fence`).
 
-Processes the following MathML tags: `mrow, mfenced, msqrt, mfrac, msup, msub, munderover, msubsup, munder, mover, mi, mn, ntext, mo`.
+Processes the following MathML tags: `mrow, mfenced, msqrt, mfrac, msup, msub, munderover, msubsup, munder, mover, mi, mn, ntext, mo, mtable, mtr, mtd`.
+
+Converts all the Unicode characters MathJax knows about into AsciiMath operators (e.g. `\\beta, xx, oint`)
+
+As with the other two MathML to AsciiMath converters available online (Python: https://github.com/rochecompaan/upfront.mathml2asciimath, Node.js: https://github.com/learningobjectsinc/mathml-to-asciimath), this converter is not foolproof, production-ready, or complete, and you will need to post-edit output. It's still a lot better than nothing. (And because it converts Unicode to Ascii, it's a lot better than the other two.)
 
