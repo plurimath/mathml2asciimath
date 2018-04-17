@@ -1,0 +1,8 @@
+= mathml2asciimath
+
+Ruby gem to convert MathML into AsciiMath
+
+Ignores style and MathML attributes (other than `mfenced/@open`, `mfenced/@close`).
+
+Processes the following MathML tags: `mrow, mfenced, msqrt, mfrac, msup, msub, munderover, msubsup, munder, mover, mi, mn, ntext, mo`.
+
