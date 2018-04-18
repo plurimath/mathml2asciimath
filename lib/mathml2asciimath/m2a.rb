@@ -63,6 +63,7 @@ module MathML2AsciiMath
       gsub(/\u00f7/, "-:").
       gsub(/\u2218/, "@").
       gsub(/\u2295/, "o+").
+      gsub(/\u2a01/, "o+").
       gsub(/\u2297/, "ox").
       gsub(/\u2299/, "o.").
       gsub(/\u2211/, "sum").
@@ -105,7 +106,9 @@ module MathML2AsciiMath
       gsub(/\u2329/, "(:").
       gsub(/\u232a/, ":)").
       gsub(/\u2329/, "<<").
+      gsub(/\u27e8/, "<<").
       gsub(/\u232a/, ">>").
+      gsub(/\u27e9/, ">>").
       gsub(/\u222e/, "oint").
       gsub(/\u2202/, "del").
       gsub(/\u2207/, "grad").
