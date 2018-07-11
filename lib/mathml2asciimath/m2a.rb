@@ -253,7 +253,7 @@ module MathML2AsciiMath
       when "mi"
         # mi is not meant to have space around it, but Word is conflating operators and operands
         node.children.each { |n| out << parse(n) }
-        out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match? out
+        out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
         return out
       when "mo"
         node.children.each { |n| out << parse(n) }
