@@ -181,7 +181,7 @@ module MathML2AsciiMath
         open = node["open"] || "("
         close = node["close"] || ")"
         separator = "," # TODO currently ignore the supplied separators
-        node.children.each { |n| outarr << parse(n) }
+        node.elements.each { |n| outarr << parse(n) }
         out = outarr.join(separator)
         return "#{open}#{out}#{close}"
       when "msqrt"
@@ -224,7 +224,8 @@ module MathML2AsciiMath
         accent = case elem1
                  when "\u005e" then "hat"
                  when "\u00af" then "bar"
-                 when "\u2192" then "vec"
+                 #when "\u2192" then "vec"
+                 when "->" then "vec"
                  when "." then "dot"
                  when ".." then "ddot"
                  when "\u23de" then "obrace"
@@ -238,14 +239,14 @@ module MathML2AsciiMath
         end
       when "mtable"
         rows = []
-        node.children.each { |n| rows << parse(n) }
+        node.elements.each { |n| rows << parse(n) }
         return "[#{rows.join(",")}]"
       when "mtr"
         cols = []
-        node.children.each { |n| cols << parse(n) }
+        node.elements.each { |n| cols << parse(n) }
         return "[#{cols.join(",")}]"
       when "mtd"
-        node.children.each { |n| out << parse(n) }
+        node.elements.each { |n| out << parse(n) }
         return "#{out}"
       when "mn", "mtext"
         node.children.each { |n| out << parse(n) }
