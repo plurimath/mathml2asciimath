@@ -1,8 +1,8 @@
 = mathml2asciimath
 
 image:https://img.shields.io/gem/v/mathml2asciimath.svg["Gem Version", link="https://rubygems.org/gems/mathml2asciimath"]
-image:https://img.shields.io/travis/riboseinc/mathml2asciimath/master.svg["Build Status", link="https://travis-ci.org/riboseinc/mathml2asciimath"]
-image:https://codeclimate.com/github/riboseinc/mathml2asciimath/badges/gpa.svg["Code Climate", link="https://codeclimate.com/github/riboseinc/mathml2asciimath"]
+image:https://img.shields.io/travis/metanorma/mathml2asciimath/master.svg["Build Status", link="https://travis-ci.org/metanorma/mathml2asciimath"]
+image:https://codeclimate.com/github/metanorma/mathml2asciimath/badges/gpa.svg["Code Climate", link="https://codeclimate.com/github/metanorma/mathml2asciimath"]
 
 Ruby gem to convert MathML into AsciiMath
 
