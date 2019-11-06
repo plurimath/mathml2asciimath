@@ -1,10 +1,11 @@
 = mathml2asciimath
 
 image:https://img.shields.io/gem/v/mathml2asciimath.svg["Gem Version", link="https://rubygems.org/gems/mathml2asciimath"]
-image:https://img.shields.io/travis/metanorma/mathml2asciimath/master.svg["Travis Build Status", link="https://travis-ci.org/metanorma/mathml2asciimath"]
-image:https://ci.appveyor.com/api/projects/status/qvd7fsh8m2aiua4c?svg=true["Appveyor Build Status", link="https://ci.appveyor.com/project/ribose/mathml2asciimath"]
+image:https://img.shields.io/travis/metanorma/mathml2asciimath/master.svg["Travis Build Status", link="https://travis-ci.com/metanorma/mathml2asciimath"]
+image:https://ci.appveyor.com/api/projects/status/0vqhxs3swgl3jvwn?svg=true["Appveyor Build Status", link="https://ci.appveyor.com/project/metanorma/mathml2asciimath"]
 image:https://codeclimate.com/github/metanorma/mathml2asciimath/badges/gpa.svg["Code Climate", link="https://codeclimate.com/github/metanorma/mathml2asciimath"]
-image:https://ci.appveyor.com/api/projects/status/qvd7fsh8m2aiua4c?svg=true["Appveyor Build Status", link="https://ci.appveyor.com/project/ribose/mathml2asciimath"]
+image:https://img.shields.io/github/issues-pr-raw/metanorma/mathml2asciimath.svg["Pull Requests", link="https://github.com/metanorma/mathml2asciimath/pulls"]
+image:https://img.shields.io/github/commits-since/metanorma/mathml2asciimath/latest.svg["Commits since latest",link="https://github.com/metanorma/mathml2asciimath/releases"]
 
 Ruby gem to convert MathML into AsciiMath
 
