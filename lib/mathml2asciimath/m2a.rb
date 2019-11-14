@@ -260,6 +260,9 @@ module MathML2AsciiMath
         node.children.each { |n| out << parse(n) }
         out = " #{out} " unless node["fence"]
         return out
+      when "mstyle"
+        node.children.each { |n| out << parse(n) }
+        return out
       else
         node.to_xml
       end
