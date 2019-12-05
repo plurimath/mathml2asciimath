@@ -6,7 +6,6 @@ module MathML2AsciiMath
 
   def self.m2a(x)
     docxml = Nokogiri::XML(x)
-    docxml.remove_namespaces!
     parse(docxml.root).gsub(/  /, " ").
       sub(/^\s+/, "").
       sub(/\s+$/, "")
@@ -165,7 +164,7 @@ module MathML2AsciiMath
     if node.text?
       return encodechars(HTMLEntities.new.decode(node.text))
     else
-      case node.name
+      case node.name.sub(/^[^:]*:/, "")
       when "math"
         node.elements.each { |n| out << parse(n) }
         return out
@@ -173,7 +172,7 @@ module MathML2AsciiMath
         outarr = []
         node.children.each { |n| outarr << parse(n) }
         out = outarr.join("")
-        if %w{mfrac msub munder munderover}.include? node.parent.name
+        if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, "")
           out = "(#{out})"
         end
         return out
