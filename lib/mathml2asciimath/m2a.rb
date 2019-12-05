@@ -6,6 +6,7 @@ module MathML2AsciiMath
 
   def self.m2a(x)
     docxml = Nokogiri::XML(x)
+    docxml.remove_namespaces!
     parse(docxml.root).gsub(/  /, " ").
       sub(/^\s+/, "").
       sub(/\s+$/, "")
@@ -268,5 +269,4 @@ module MathML2AsciiMath
       end
     end
   end
-
 end
