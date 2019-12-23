@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "htmlentities", "~> 4.3.4"
   spec.add_dependency "nokogiri", ">= 1.10.4"
 
-  spec.add_development_dependency "bundler", "~> 2.0.1"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "byebug", "~> 9.1"
   spec.add_development_dependency "rspec-match_fuzzy", "~> 0.1.3"
   spec.add_development_dependency "guard", "~> 2.14"
