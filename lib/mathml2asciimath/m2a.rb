@@ -171,6 +171,10 @@ module MathML2AsciiMath
       outarr = []
       node.elements.each { |n| outarr << parse(n).strip }
       return outarr.join(" ")
+
+    when "annotation"
+      return ""
+
     when "semantics"
       outarr = []
       node.elements.each { |n| outarr << parse(n).strip }
@@ -184,6 +188,7 @@ module MathML2AsciiMath
         out = "(#{out})"
       end
       return out
+
     when "mfenced"
       outarr = []
       open = node["open"] || "("
@@ -192,33 +197,34 @@ module MathML2AsciiMath
       node.elements.each { |n| outarr << parse(n).strip }
       out = outarr.join(separator)
       return "#{open}#{out}#{close}"
+
     when "msqrt"
       outarr = []
       node.elements.each { |n| outarr << parse(n).strip }
       return "sqrt(#{outarr.join(" ")})"
 
     when "mfrac"
-
       return "(#{parse(node.elements[0])})/(#{parse(node.elements[1])})"
+
     when "msup"
       sup = parse(node.elements[1])
       sup = "(#{sup})" unless sup.length == 1
       op = parse(node.elements[0]).gsub(/ $/, "")
       return "#{op}^#{sup}"
+
     when "msub"
       sub = parse(node.elements[1])
       sub = "(#{sub})" unless sub.length == 1
       op = parse(node.elements[0]).gsub(/ $/, "")
       return "#{op}_#{sub}"
+
     when "munderover", "msubsup"
       sub = parse(node.elements[1])
       sub = "(#{sub})" unless sub.length == 1
-
       sup = parse(node.elements[2])
       sup = "(#{sup})" unless sup.length == 1
       op = parse(node.elements[0]).gsub(/ $/, "")
       return "#{op}_#{sub}^#{sup}"
-
 
     when "munder"
       elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")

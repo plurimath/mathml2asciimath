@@ -340,6 +340,38 @@ RSpec.describe MathML2AsciiMath do
     bar lambda ( t_1 , t_2 )
     OUTPUT
   end
+
+
+  it "processes and skips <annotation> element" do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    <math>
+      <semantics>
+        <mrow>
+          <mover accent="true">
+            <mi>z</mi>
+            <mo>&#xAF;</mo>
+          </mover>
+          <mo stretchy="false">(</mo>
+          <msub>
+            <mi>t</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>,</mo>
+          <mtext>&#x2009;</mtext>
+          <msub>
+            <mi>t</mi>
+            <mn>2</mn>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </mrow>
+        <annotation encoding="MathType-MTEF">MathType@MTEF@5@5@+=feaagCart1ev2aaatCvAUfeBSjuyZL2yd9gzLbvyNv2CaerbuLwBLnhiov2DGi1BTfMBaeXatLxBI9gBaerbbjxAHXgarqqtubsr4rNCHbGeaGqipG0dh9qqWrVepG0dbbL8F4rqqrVepeea0xe9LqFf0xc9q8qqaqFn0lXdHiVcFbIOFHK8Feea0dXdar=Jb9hs0dXdHuk9fr=xfr=xfrpeWZqaaeqabiGaciGacaqadmaadaqaaqaaaOqaaiqadQhagaqeaiaacIcacaWG0bWaaSbaaSqaaiaaigdaaeqaaOGaaiilaiaaysW7caWG0bWaaSbaaSqaaiaaikdaaeqaaOGaaiykaaaa@3DCE@</annotation>
+      </semantics>
+    </math>
+    INPUT
+    bar z ( t_1 , t_2 )
+    OUTPUT
+  end
+
   it "processes some unknown MathML" do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
