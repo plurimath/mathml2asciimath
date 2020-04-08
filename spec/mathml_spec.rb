@@ -13,41 +13,7 @@ RSpec.describe MathML2AsciiMath do
     </mstyle>
     </math>
     INPUT
-    a diamond x^2\n  + b xx x\n  + c_3
-    OUTPUT
-  end
-
-  it "processes <semantics> wrapping element" do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
-    <math xmlns="http://www.w3.org/1998/Math/MathML">
-      <semantics>
-        <mrow>
-          <mover accent="true">
-            <mi>&#x3BB;</mi>
-            <mo>&#xAF;</mo>
-          </mover>
-          <mo stretchy="false">(</mo>
-          <msub>
-            <mi>t</mi>
-            <mn>1</mn>
-          </msub>
-          <mo>,</mo>
-          <mtext>&#x2009;</mtext>
-          <msub>
-            <mi>t</mi>
-            <mn>2</mn>
-          </msub>
-          <mo stretchy="false">)</mo>
-        </mrow>
-      </semantics>
-    </math>
-    INPUT
-    bar lambda
-    (
-    t_1
-    ,
-    t_2
-    )
+    a diamond x^2 + b xx x + c_3
     OUTPUT
   end
 
@@ -61,7 +27,7 @@ RSpec.describe MathML2AsciiMath do
     </mrow>
     </math>
     INPUT
-    a diamond x^(2d)\n+ b xx x\n+ c_(ab)
+    a diamond x^(2d) + b xx x + c_(ab)
     OUTPUT
   end
 
@@ -139,7 +105,7 @@ RSpec.describe MathML2AsciiMath do
 </munder>
     </math>
     INPUT
-    ubrace (\nx\n+\ny\n+\nz\n)
+    ubrace ( x + y + z )
     OUTPUT
   end
 
@@ -158,7 +124,7 @@ RSpec.describe MathML2AsciiMath do
 </munder>
     </math>
     INPUT
-    ul (\nx\n+\ny\n+\nz\n)
+    ul ( x + y + z )
     OUTPUT
   end
 
@@ -177,7 +143,7 @@ RSpec.describe MathML2AsciiMath do
 </munder>
     </math>
     INPUT
-    underset(fred)((\nx\n+\ny\n+\nz\n))
+    underset(fred)(( x + y + z ))
     OUTPUT
   end
 
@@ -197,7 +163,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    obrace\nx\n+\ny\n+\nz
+    obrace x + y + z
     OUTPUT
   end
 
@@ -217,7 +183,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    hat\nx\n+\ny\n+\nz
+    hat x + y + z
     OUTPUT
   end
 
@@ -237,7 +203,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    bar\nx\n+\ny\n+\nz
+    bar x + y + z
     OUTPUT
   end
 
@@ -257,7 +223,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    vec\nx\n+\ny\n+\nz
+    vec x + y + z
     OUTPUT
   end
 
@@ -277,7 +243,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    dot\nx\n+\ny\n+\nz
+    dot x + y + z
     OUTPUT
   end
 
@@ -297,7 +263,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    ddot\nx\n+\ny\n+\nz
+    ddot x + y + z
     OUTPUT
   end
 
@@ -317,7 +283,7 @@ RSpec.describe MathML2AsciiMath do
 
     </math>
     INPUT
-    overset(fred)(\nx\n+\ny\n+\nz\n)
+    overset(fred)( x + y + z )
     OUTPUT
   end
 
@@ -346,7 +312,35 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-    it "processes some unknown MathML" do
+  it "processes <semantics> wrapping element" do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <semantics>
+        <mrow>
+          <mover accent="true">
+            <mi>&#x3BB;</mi>
+            <mo>&#xAF;</mo>
+          </mover>
+          <mo stretchy="false">(</mo>
+          <msub>
+            <mi>t</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>,</mo>
+          <mtext>&#x2009;</mtext>
+          <msub>
+            <mi>t</mi>
+            <mn>2</mn>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </mrow>
+      </semantics>
+    </math>
+    INPUT
+    bar lambda ( t_1 , t_2 )
+    OUTPUT
+  end
+  it "processes some unknown MathML" do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
     <mrow>
@@ -360,7 +354,7 @@ RSpec.describe MathML2AsciiMath do
 </mrow>
     </math>
     INPUT
-    x\n+\n<mphantom>\n<mi> y </mi>\n<mo> + </mo>\n</mphantom>\nz
+    x + <mphantom>\n<mi> y </mi>\n<mo> + </mo>\n</mphantom> z
     OUTPUT
   end
 

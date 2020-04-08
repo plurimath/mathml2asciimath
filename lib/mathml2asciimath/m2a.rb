@@ -168,15 +168,18 @@ module MathML2AsciiMath
 
     case node.name.sub(/^[^:]*:/, "")
     when "math"
-      node.elements.each { |n| out << parse(n) }
-      return out
+      outarr = []
+      node.elements.each { |n| outarr << parse(n).strip }
+      return outarr.join(" ")
     when "semantics"
-      node.elements.each { |n| out << parse(n) }
-      return out
+      outarr = []
+      node.elements.each { |n| outarr << parse(n).strip }
+      return outarr.join(" ")
+
     when "mrow"
       outarr = []
-      node.children.each { |n| outarr << parse(n) }
-      out = outarr.join("")
+      node.children.each { |n| outarr << parse(n).strip }
+      out = outarr.join(" ")
       if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, "")
         out = "(#{out})"
       end
@@ -186,13 +189,16 @@ module MathML2AsciiMath
       open = node["open"] || "("
       close = node["close"] || ")"
       separator = "," # TODO currently ignore the supplied separators
-      node.elements.each { |n| outarr << parse(n) }
+      node.elements.each { |n| outarr << parse(n).strip }
       out = outarr.join(separator)
       return "#{open}#{out}#{close}"
     when "msqrt"
-      node.children.each { |n| out << parse(n) }
-      return "sqrt(#{out})"
+      outarr = []
+      node.elements.each { |n| outarr << parse(n).strip }
+      return "sqrt(#{outarr.join(" ")})"
+
     when "mfrac"
+
       return "(#{parse(node.elements[0])})/(#{parse(node.elements[1])})"
     when "msup"
       sup = parse(node.elements[1])
@@ -207,10 +213,13 @@ module MathML2AsciiMath
     when "munderover", "msubsup"
       sub = parse(node.elements[1])
       sub = "(#{sub})" unless sub.length == 1
+
       sup = parse(node.elements[2])
       sup = "(#{sup})" unless sup.length == 1
       op = parse(node.elements[0]).gsub(/ $/, "")
       return "#{op}_#{sub}^#{sup}"
+
+
     when "munder"
       elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
       accent = case elem1
@@ -242,32 +251,46 @@ module MathML2AsciiMath
       else
         return "#{accent} #{parse(node.elements[0])}"
       end
+
     when "mtable"
-      rows = []
-      node.elements.each { |n| rows << parse(n) }
-      return "[#{rows.join(",")}]"
+      outarr = []
+      node.elements.each { |n| outarr << parse(n).strip }
+      return "[#{outarr.join(",")}]"
+
     when "mtr"
-      cols = []
-      node.elements.each { |n| cols << parse(n) }
-      return "[#{cols.join(",")}]"
+      outarr = []
+      node.elements.each { |n| outarr << parse(n).strip }
+      return "[#{outarr.join(",")}]"
+
     when "mtd"
-      node.elements.each { |n| out << parse(n) }
-      return "#{out}"
+      outarr = []
+      node.elements.each { |n| outarr << parse(n).strip }
+      return "#{outarr.join(",")}"
+
     when "mn", "mtext"
-      node.children.each { |n| out << parse(n) }
-      return "#{out}"
+      outarr = []
+      node.children.each { |n| outarr << parse(n).strip }
+      return "#{outarr.join("")}"
+
     when "mi"
       # mi is not meant to have space around it, but Word is conflating operators and operands
-      node.children.each { |n| out << parse(n) }
+      outarr = []
+      node.children.each { |n| outarr << parse(n).strip }
+      out = outarr.join(" ")
       out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
       return out
+
     when "mo"
-      node.children.each { |n| out << parse(n) }
+      outarr = []
+      node.children.each { |n| outarr << parse(n).strip }
+      out = outarr.join(" ")
       out = " #{out} " unless node["fence"]
       return out
+
     when "mstyle"
-      node.children.each { |n| out << parse(n) }
-      return out
+      outarr = []
+      node.children.each { |n| outarr << parse(n).strip }
+      out = outarr.join(" ")
     else
       node.to_xml
 
