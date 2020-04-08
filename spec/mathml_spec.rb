@@ -17,6 +17,40 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
+  it "processes <semantics> wrapping element" do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <semantics>
+        <mrow>
+          <mover accent="true">
+            <mi>&#x3BB;</mi>
+            <mo>&#xAF;</mo>
+          </mover>
+          <mo stretchy="false">(</mo>
+          <msub>
+            <mi>t</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>,</mo>
+          <mtext>&#x2009;</mtext>
+          <msub>
+            <mi>t</mi>
+            <mn>2</mn>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </mrow>
+      </semantics>
+    </math>
+    INPUT
+    bar lambda
+    (
+    t_1
+    ,
+    t_2
+    )
+    OUTPUT
+  end
+
   it "processes some MathML" do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -159,7 +193,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo> &#x23DE;</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -179,7 +213,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo> &#x5e;</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -199,7 +233,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo> &#xaf;</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -211,7 +245,7 @@ RSpec.describe MathML2AsciiMath do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
 <mover accent="true">
-  <mrow>  
+  <mrow>
     <mi> x </mi>
     <mo> + </mo>
     <mi> y </mi>
@@ -219,7 +253,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo>&#x2192;</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -231,7 +265,7 @@ RSpec.describe MathML2AsciiMath do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
 <mover accent="true">
-  <mrow>  
+  <mrow>
     <mi> x </mi>
     <mo> + </mo>
     <mi> y </mi>
@@ -239,7 +273,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo> .</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -251,7 +285,7 @@ RSpec.describe MathML2AsciiMath do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
 <mover accent="true">
-  <mrow>  
+  <mrow>
     <mi> x </mi>
     <mo> + </mo>
     <mi> y </mi>
@@ -259,7 +293,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo>..</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -271,7 +305,7 @@ RSpec.describe MathML2AsciiMath do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
 <mover accent="true">
-  <mrow>  
+  <mrow>
     <mi> x </mi>
     <mo> + </mo>
     <mi> y </mi>
@@ -279,7 +313,7 @@ RSpec.describe MathML2AsciiMath do
     <mi> z </mi>
   </mrow>
   <mo>fred</mo>
-</mover> 
+</mover>
 
     </math>
     INPUT
@@ -317,7 +351,7 @@ RSpec.describe MathML2AsciiMath do
     <math xmlns="http://www.w3.org/1998/Math/MathML">
     <mrow>
   <mi> x </mi>
-  <mo> + </mo> 
+  <mo> + </mo>
   <mphantom>
     <mi> y </mi>
     <mo> + </mo>

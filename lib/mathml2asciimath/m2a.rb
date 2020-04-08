@@ -12,43 +12,44 @@ module MathML2AsciiMath
   end
 
   def self.encodechars(x)
-    x.gsub(/\u03b1/, "\\alpha").
-      gsub(/\u03b2/, "\\beta").
-      gsub(/\u03b3/, "\\gamma").
-      gsub(/\u0393/, "\\Gamma").
-      gsub(/\u03b4/, "\\delta").
-      gsub(/\u0394/, "\\Delta").
-      gsub(/\u2206/, "\\Delta").
-      gsub(/\u03b5/, "\\epsilon").
-      gsub(/\u025b/, "\\varepsilon").
-      gsub(/\u03b6/, "\\zeta").
-      gsub(/\u03b7/, "\\eta").
-      gsub(/\u03b8/, "\\theta").
-      gsub(/\u0398/, "\\Theta").
-      gsub(/\u03d1/, "\\vartheta").
-      gsub(/\u03b9/, "\\iota").
-      gsub(/\u03ba/, "\\kappa").
-      gsub(/\u03bb/, "\\lambda").
-      gsub(/\u039b/, "\\Lambda").
-      gsub(/\u03bc/, "\\mu").
-      gsub(/\u03bd/, "\\nu").
-      gsub(/\u03be/, "\\xi").
-      gsub(/\u039e/, "\\Xi").
-      gsub(/\u03c0/, "\\pi").
-      gsub(/\u03a0/, "\\Pi").
-      gsub(/\u03c1/, "\\rho").
-      gsub(/\u03c2/, "\\beta").
-      gsub(/\u03c3/, "\\sigma").
-      gsub(/\u03a3/, "\\Sigma").
-      gsub(/\u03c4/, "\\tau").
-      gsub(/\u03c5/, "\\upsilon").
-      gsub(/\u03c6/, "\\phi").
-      gsub(/\u03a6/, "\\Phi").
-      gsub(/\u03d5/, "\\varphi").
-      gsub(/\u03c7/, "\\chi").
-      gsub(/\u03c8/, "\\psi").
-      gsub(/\u03a8/, "\\Psi").
-      gsub(/\u03c9/, "\\omega").
+    x.gsub(/\u03b1/, "alpha").
+      gsub(/\u03b2/, "beta").
+      gsub(/\u03b3/, "gamma").
+      gsub(/\u0393/, "Gamma").
+      gsub(/\u03b4/, "delta").
+      gsub(/\u0394/, "Delta").
+      gsub(/\u2206/, "Delta").
+      gsub(/\u03b5/, "epsilon").
+      gsub(/\u025b/, "varepsilon").
+      gsub(/\u03b6/, "zeta").
+      gsub(/\u03b7/, "eta").
+      gsub(/\u03b8/, "theta").
+      gsub(/\u0398/, "Theta").
+      gsub(/\u03d1/, "vartheta").
+      gsub(/\u03b9/, "iota").
+      gsub(/\u03ba/, "kappa").
+      gsub(/\u03bb/, "lambda").
+      gsub(/\u039b/, "Lambda").
+      gsub(/\u03bc/, "mu").
+      gsub(/\u03bd/, "nu").
+      gsub(/\u03be/, "xi").
+      gsub(/\u039e/, "Xi").
+      gsub(/\u03c0/, "pi").
+      gsub(/\u03a0/, "Pi").
+      gsub(/\u03c1/, "rho").
+      gsub(/\u03c2/, "beta").
+      gsub(/\u03c3/, "sigma").
+      gsub(/\u03a3/, "Sigma").
+      gsub(/\u03c4/, "tau").
+      gsub(/\u03c5/, "upsilon").
+      gsub(/\u03c6/, "phi").
+      gsub(/\u03a6/, "Phi").
+      gsub(/\u03d5/, "varphi").
+      gsub(/\u03c7/, "chi").
+      gsub(/\u03c8/, "psi").
+      gsub(/\u03a8/, "Psi").
+      gsub(/\u03c9/, "omega").
+      gsub(/\u03a9/, "omega").
       gsub(/\u22c5/, "*").
       gsub(/\u2219/, "*").
       gsub(/\u00b7/, "*").
@@ -163,109 +164,113 @@ module MathML2AsciiMath
     out = ""
     if node.text?
       return encodechars(HTMLEntities.new.decode(node.text))
-    else
-      case node.name.sub(/^[^:]*:/, "")
-      when "math"
-        node.elements.each { |n| out << parse(n) }
-        return out
-      when "mrow"
-        outarr = []
-        node.children.each { |n| outarr << parse(n) }
-        out = outarr.join("")
-        if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, "")
-          out = "(#{out})"
-        end
-        return out
-      when "mfenced"
-        outarr = []
-        open = node["open"] || "("
-        close = node["close"] || ")"
-        separator = "," # TODO currently ignore the supplied separators
-        node.elements.each { |n| outarr << parse(n) }
-        out = outarr.join(separator)
-        return "#{open}#{out}#{close}"
-      when "msqrt"
-        node.children.each { |n| out << parse(n) }
-        return "sqrt(#{out})"
-      when "mfrac"
-        return "(#{parse(node.elements[0])})/(#{parse(node.elements[1])})"
-      when "msup"
-        sup = parse(node.elements[1])
-        sup = "(#{sup})" unless sup.length == 1
-        op = parse(node.elements[0]).gsub(/ $/, "")
-        return "#{op}^#{sup}"
-      when "msub"
-        sub = parse(node.elements[1])
-        sub = "(#{sub})" unless sub.length == 1
-        op = parse(node.elements[0]).gsub(/ $/, "")
-        return "#{op}_#{sub}"
-      when "munderover", "msubsup"
-        sub = parse(node.elements[1])
-        sub = "(#{sub})" unless sub.length == 1
-        sup = parse(node.elements[2])
-        sup = "(#{sup})" unless sup.length == 1
-        op = parse(node.elements[0]).gsub(/ $/, "")
-        return "#{op}_#{sub}^#{sup}"
-      when "munder"
-        elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
-        accent = case elem1
-                 when "\u0332" then "ul"
-                 when "\u23df" then "ubrace"
-                 else
-                   "underset"
-                 end
-        if accent == "underset"
-          return "underset(#{elem1})(#{parse(node.elements[0])})"
-        else
-          return "#{accent} #{parse(node.elements[0])}"
-        end
-      when "mover"
-        elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
-        accent = case elem1
-                 when "\u005e" then "hat"
-                 when "\u00af" then "bar"
-                 #when "\u2192" then "vec"
-                 when "->" then "vec"
-                 when "." then "dot"
-                 when ".." then "ddot"
-                 when "\u23de" then "obrace"
-                 else
-                   "overset"
-                 end
-        if accent == "overset"
-          return "overset(#{elem1})(#{parse(node.elements[0])})"
-        else
-          return "#{accent} #{parse(node.elements[0])}"
-        end
-      when "mtable"
-        rows = []
-        node.elements.each { |n| rows << parse(n) }
-        return "[#{rows.join(",")}]"
-      when "mtr"
-        cols = []
-        node.elements.each { |n| cols << parse(n) }
-        return "[#{cols.join(",")}]"
-      when "mtd"
-        node.elements.each { |n| out << parse(n) }
-        return "#{out}"
-      when "mn", "mtext"
-        node.children.each { |n| out << parse(n) }
-        return "#{out}"
-      when "mi"
-        # mi is not meant to have space around it, but Word is conflating operators and operands
-        node.children.each { |n| out << parse(n) }
-        out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
-        return out
-      when "mo"
-        node.children.each { |n| out << parse(n) }
-        out = " #{out} " unless node["fence"]
-        return out
-      when "mstyle"
-        node.children.each { |n| out << parse(n) }
-        return out
-      else
-        node.to_xml
+    end
+
+    case node.name.sub(/^[^:]*:/, "")
+    when "math"
+      node.elements.each { |n| out << parse(n) }
+      return out
+    when "semantics"
+      node.elements.each { |n| out << parse(n) }
+      return out
+    when "mrow"
+      outarr = []
+      node.children.each { |n| outarr << parse(n) }
+      out = outarr.join("")
+      if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, "")
+        out = "(#{out})"
       end
+      return out
+    when "mfenced"
+      outarr = []
+      open = node["open"] || "("
+      close = node["close"] || ")"
+      separator = "," # TODO currently ignore the supplied separators
+      node.elements.each { |n| outarr << parse(n) }
+      out = outarr.join(separator)
+      return "#{open}#{out}#{close}"
+    when "msqrt"
+      node.children.each { |n| out << parse(n) }
+      return "sqrt(#{out})"
+    when "mfrac"
+      return "(#{parse(node.elements[0])})/(#{parse(node.elements[1])})"
+    when "msup"
+      sup = parse(node.elements[1])
+      sup = "(#{sup})" unless sup.length == 1
+      op = parse(node.elements[0]).gsub(/ $/, "")
+      return "#{op}^#{sup}"
+    when "msub"
+      sub = parse(node.elements[1])
+      sub = "(#{sub})" unless sub.length == 1
+      op = parse(node.elements[0]).gsub(/ $/, "")
+      return "#{op}_#{sub}"
+    when "munderover", "msubsup"
+      sub = parse(node.elements[1])
+      sub = "(#{sub})" unless sub.length == 1
+      sup = parse(node.elements[2])
+      sup = "(#{sup})" unless sup.length == 1
+      op = parse(node.elements[0]).gsub(/ $/, "")
+      return "#{op}_#{sub}^#{sup}"
+    when "munder"
+      elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
+      accent = case elem1
+               when "\u0332" then "ul"
+               when "\u23df" then "ubrace"
+               else
+                 "underset"
+               end
+      if accent == "underset"
+        return "underset(#{elem1})(#{parse(node.elements[0])})"
+      else
+        return "#{accent} #{parse(node.elements[0])}"
+      end
+    when "mover"
+      elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
+      accent = case elem1
+               when "\u005e" then "hat"
+               when "\u00af" then "bar"
+               #when "\u2192" then "vec"
+               when "->" then "vec"
+               when "." then "dot"
+               when ".." then "ddot"
+               when "\u23de" then "obrace"
+               else
+                 "overset"
+               end
+      if accent == "overset"
+        return "overset(#{elem1})(#{parse(node.elements[0])})"
+      else
+        return "#{accent} #{parse(node.elements[0])}"
+      end
+    when "mtable"
+      rows = []
+      node.elements.each { |n| rows << parse(n) }
+      return "[#{rows.join(",")}]"
+    when "mtr"
+      cols = []
+      node.elements.each { |n| cols << parse(n) }
+      return "[#{cols.join(",")}]"
+    when "mtd"
+      node.elements.each { |n| out << parse(n) }
+      return "#{out}"
+    when "mn", "mtext"
+      node.children.each { |n| out << parse(n) }
+      return "#{out}"
+    when "mi"
+      # mi is not meant to have space around it, but Word is conflating operators and operands
+      node.children.each { |n| out << parse(n) }
+      out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
+      return out
+    when "mo"
+      node.children.each { |n| out << parse(n) }
+      out = " #{out} " unless node["fence"]
+      return out
+    when "mstyle"
+      node.children.each { |n| out << parse(n) }
+      return out
+    else
+      node.to_xml
+
     end
   end
 end
