@@ -341,6 +341,34 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
+  it "processes <math> without xmlns" do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    <math>
+      <semantics>
+        <mrow>
+          <mover accent="true">
+            <mi>z</mi>
+            <mo>&#xAF;</mo>
+          </mover>
+          <mo stretchy="false">(</mo>
+          <msub>
+            <mi>t</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>,</mo>
+          <mtext>&#x2009;</mtext>
+          <msub>
+            <mi>t</mi>
+            <mn>2</mn>
+          </msub>
+          <mo stretchy="false">)</mo>
+        </mrow>
+      </semantics>
+    </math>
+    INPUT
+    bar z ( t_1 , t_2 )
+    OUTPUT
+  end
 
   it "processes and skips <annotation> element" do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
