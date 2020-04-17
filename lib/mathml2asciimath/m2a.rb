@@ -165,6 +165,12 @@ module MathML2AsciiMath
       gsub(/[\u2028\u2029]/, ' ') # normalize thin spaces like \u2009, \u2008
   end
 
+  def self.join_parsed_children(children, delimiter=' ')
+    children.map do |n|
+      parse(n).strip
+    end.join(delimiter)
+  end
+
   def self.parse(node)
     out = ''
     if node.text?
@@ -173,40 +179,31 @@ module MathML2AsciiMath
 
     case node.name.sub(/^[^:]*:/, '')
     when "math"
-      outarr = []
-      node.elements.each { |n| outarr << parse(n).strip }
-      return outarr.join(' ')
+      return join_parsed_children(node.elements)
 
     when "annotation"
       return ''
 
     when "semantics"
-      outarr = []
-      node.elements.each { |n| outarr << parse(n).strip }
-      return outarr.join(' ')
+      return join_parsed_children(node.elements)
 
     when "mrow"
-      outarr = []
-      node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(' ')
-      if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, '')
+      out = join_parsed_children(node.elements)
+      if %w[mfrac msub munder munderover].include? node.parent.name.sub(/^[^:]*:/, '')
         out = "(#{out})"
       end
       return out
 
     when "mfenced"
-      outarr = []
-      open = node["open"] || "("
-      close = node["close"] || ")"
+      sym_open = node["open"] || "("
+      sym_close = node["close"] || ")"
+
       separator = "," # TODO currently ignore the supplied separators
-      node.elements.each { |n| outarr << parse(n).strip }
-      out = outarr.join(separator)
-      return "#{open}#{out}#{close}"
+      out = join_parsed_children(node.elements, separator)
+      return "#{sym_open}#{out}#{sym_close}"
 
     when "msqrt"
-      outarr = []
-      node.elements.each { |n| outarr << parse(n).strip }
-      return "sqrt(#{outarr.join(' ')})"
+      return "sqrt(#{join_parsed_children(node.elements)})"
 
     when "mfrac"
       return "(#{parse(node.elements[0])})/(#{parse(node.elements[1])})"
@@ -267,44 +264,33 @@ module MathML2AsciiMath
       end
 
     when "mtable"
-      outarr = []
-      node.elements.each { |n| outarr << parse(n).strip }
-      return "[#{outarr.join(',')}]"
+      return "[#{join_parsed_children(node.elements, ',')}]"
 
     when "mtr"
-      outarr = []
-      node.elements.each { |n| outarr << parse(n).strip }
-      return "[#{outarr.join(',')}]"
+      return "[#{join_parsed_children(node.elements, ',')}]"
 
     when "mtd"
-      outarr = []
-      node.elements.each { |n| outarr << parse(n).strip }
-      return "#{outarr.join(',')}"
+      return join_parsed_children(node.elements, ',')
 
     when "mn", "mtext"
-      outarr = []
-      node.children.each { |n| outarr << parse(n).strip }
-      return "#{outarr.join('')}"
+      return join_parsed_children(node.children, '')
 
     when "mi"
+      # FIXME: What does this comment have to do with Word?
       # mi is not meant to have space around it, but Word is conflating operators and operands
-      outarr = []
-      node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(' ')
-      out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
+      out = join_parsed_children(node.children)
+
+      # FIXME: Why do we need to add extra spaces?
+      # out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
       return out
 
     when "mo"
-      outarr = []
-      node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(' ')
+      out = join_parsed_children(node.children)
       out = " #{out} " unless node['fence']
       return out
 
     when "mstyle"
-      outarr = []
-      node.children.each { |n| outarr << parse(n).strip }
-      return outarr.join(' ')
+      return join_parsed_children(node.children)
 
     else
       "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">" +

@@ -64,7 +64,7 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
+  it 'processes munderover' do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <munderover>
@@ -72,11 +72,11 @@ RSpec.describe MathML2AsciiMath do
       </munderover>
     </math>
     INPUT
-    \u222B_0^( oo )
+    \u222B_0^(oo)
     OUTPUT
   end
 
-  it 'processes some MathML' do
+  it 'processes msubsup' do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <msubsup>
