@@ -400,6 +400,14 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
+  it "does not include non-significant whitespaces (spaces between nodes)" do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    <math> <semantics> <mrow> <msub> <mi>x</mi> <mn>1</mn> </msub> <mo>,</mo><mtext> </mtext><msub> <mi>x</mi> <mn>2</mn> </msub> <mo>,</mo><mtext> </mtext><mtext> </mtext><mo>…</mo><mtext> </mtext><mtext> </mtext><mtext> </mtext><msub> <mi>x</mi> <mi>n</mi> </msub> </mrow> <annotation encoding='MathType-MTEF'>MathType@MTEF@5@5@+= feaagKart1ev2aqatCvAUfeBSjuyZL2yd9gzLbvyNv2CaerbbjxAHX garuavP1wzZbItLDhis9wBH5garmWu51MyVXgarqqtubsr4rNCHbGe aGqipG0dh9qqWrVepG0dbbL8F4rqqrVepeea0xe9LqFf0xc9q8qqaq Fn0lXdHiVcFbIOFHK8Feea0dXdar=Jb9hs0dXdHuk9fr=xfr=xfrpe WZqaaeGaciWaamGadaGadeaabaGaaqaaaOqaaiaadIhadaWgaaWcba GaaGymaaqabaGccaGGSaGaaGjbVlaadIhadaWgaaWcbaGaaGOmaaqa baGccaGGSaGaaGjbVlaaykW7cqWIMaYscaaMc8UaaGPaVlaaysW7ca WG4bWaaSbaaSqaaiaad6gaaeqaaaaa@4713@ </annotation> </semantics> </math>
+    INPUT
+    x_1, x_2, ... x_n
+    OUTPUT
+  end
+
   it "processes some unknown MathML" do
     expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
     <math xmlns="http://www.w3.org/1998/Math/MathML">
