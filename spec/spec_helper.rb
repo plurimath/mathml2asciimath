@@ -8,5 +8,5 @@ end
 SimpleCov.start 'gem'
 
 require "rspec/match_fuzzy"
-require "mathml2asciimath"
+require 'mathml2asciimath'
 

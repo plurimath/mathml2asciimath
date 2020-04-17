@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe MathML2AsciiMath do
   it 'processes mstyle and mrow' do
