@@ -5,8 +5,14 @@ require "pp"
 module MathML2AsciiMath
 
   def self.m2a(x)
-    docxml = Nokogiri::XML.parse(x, &:noblanks)
-    parse(docxml.root).gsub(/  /, ' ').strip
+    normalized = x
+
+    # &:noblanks skips non-significant whitespaces in MathML
+    docxml = Nokogiri::XML.parse(normalized, &:noblanks)
+
+    # Get rid of things like
+    #           <mtext>&#x2009;</mtext>
+    parse(docxml.root).gsub(/[[:blank:]]/, ' ').unicode_normalize.squeeze(' ')
   end
 
   def self.encodechars(x)
@@ -155,7 +161,8 @@ module MathML2AsciiMath
       gsub(/\u2026/, "...").
       gsub(/\u2212/, "-").
       gsub(/\u2061/, ''). # function application
-      gsub(/\u2751/, "square")
+      gsub(/\u2751/, "square").
+      gsub(/[\u2028\u2029]/, ' ') # normalize thin spaces like \u2009, \u2008
   end
 
   def self.parse(node)
@@ -225,7 +232,7 @@ module MathML2AsciiMath
       return "#{op}_#{sub}^#{sup}"
 
     when "munder"
-      elem1 = parse(node.elements[1]).sub(/^\s+/, '').sub(/\s+$/, '')
+      elem1 = parse(node.elements[1]).strip
       accent = case elem1
                when "\u0332" then "ul"
                when "\u23df" then "ubrace"
@@ -240,7 +247,7 @@ module MathML2AsciiMath
       end
 
     when "mover"
-      elem1 = parse(node.elements[1]).sub(/^\s+/, '').sub(/\s+$/, '')
+      elem1 = parse(node.elements[1]).strip
       accent = case elem1
                when "\u005e" then "hat"
                when "\u00af" then "bar"
@@ -300,7 +307,9 @@ module MathML2AsciiMath
       return outarr.join(' ')
 
     else
-      node.to_xml
+      "<math xmlns=\"http://www.w3.org/1998/Math/MathML\">" +
+        node.to_xml +
+      "</math>"
 
     end
   end

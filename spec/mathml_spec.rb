@@ -1,8 +1,8 @@
 require "spec_helper"
 
 RSpec.describe MathML2AsciiMath do
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes mstyle and mrow' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mstyle>
       <mrow>
@@ -17,8 +17,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes mrow' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mrow>
         <mi>a</mi> <mo>⋄</mo> <msup><mi>x</mi><mn>2d</mn></msup>
@@ -31,8 +31,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes mfrac' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mfrac>
         <mrow> <mn> 1 </mn> <mo> + </mo> <msqrt> <mn> 5 </mn> </msqrt> </mrow>
@@ -40,32 +40,32 @@ RSpec.describe MathML2AsciiMath do
       </mfrac>
     </math>
     INPUT
-    (( 1 + sqrt( 5 ) ))/( 2 )
+    ((1 + sqrt(5)))/(2)
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes mfenced default' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mfenced><mrow><mi> a </mi> <mo> + </mo> <mi> b </mi></mrow></mfenced>
     </math>
     INPUT
-    ( a + b )
+    (a + b)
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes mfenced with unmatching braces' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.to_s.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mfenced open="["> <mn> 0 </mn> <mn> 1 </mn> </mfenced>
     </math>
     INPUT
-    [ 0 , 1 )
+    [0,1)
     OUTPUT
   end
 
   it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <munderover>
         <mo>&#x222B;</mo> <mn>0</mn> <mi>&#x221E;</mi>
@@ -77,7 +77,7 @@ RSpec.describe MathML2AsciiMath do
   end
 
   it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <msubsup>
         <mo>&#x222B;</mo>
@@ -90,8 +90,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes ubrace' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <munder>
         <mrow>
@@ -105,12 +105,12 @@ RSpec.describe MathML2AsciiMath do
       </munder>
     </math>
     INPUT
-    ubrace ( x + y + z )
+    ubrace (x + y + z)
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes ul' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <munder>
         <mrow>
@@ -124,12 +124,12 @@ RSpec.describe MathML2AsciiMath do
       </munder>
     </math>
     INPUT
-    ul ( x + y + z )
+    ul (x + y + z)
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes underset' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <munder>
         <mrow>
@@ -143,12 +143,12 @@ RSpec.describe MathML2AsciiMath do
       </munder>
     </math>
     INPUT
-    underset(fred)(( x + y + z ))
+    underset(fred)((x + y + z))
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes obrace' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -166,8 +166,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes hat' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -185,8 +185,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes bar' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -204,8 +204,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes vec' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -223,8 +223,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes dot' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -242,8 +242,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes ddot' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -261,8 +261,8 @@ RSpec.describe MathML2AsciiMath do
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes overset' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mover accent="true">
         <mrow>
@@ -276,12 +276,12 @@ RSpec.describe MathML2AsciiMath do
       </mover>
     </math>
     INPUT
-    overset(fred)( x + y + z )
+    overset(fred)(x + y + z)
     OUTPUT
   end
 
-  it 'processes some MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes mtable' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mi>X</mi>
       <mo>=</mo>
@@ -306,7 +306,7 @@ RSpec.describe MathML2AsciiMath do
   end
 
   it 'processes <semantics> wrapping element' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <semantics>
         <mrow>
@@ -335,7 +335,7 @@ RSpec.describe MathML2AsciiMath do
   end
 
   it 'processes <math> without xmlns' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math>
       <semantics>
         <mrow>
@@ -364,7 +364,7 @@ RSpec.describe MathML2AsciiMath do
   end
 
   it 'processes and skips <annotation> element' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math>
       <semantics>
         <mrow>
@@ -394,15 +394,15 @@ RSpec.describe MathML2AsciiMath do
   end
 
   it 'does not include non-significant whitespaces (spaces between nodes)' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math> <semantics> <mrow> <msub> <mi>x</mi> <mn>1</mn> </msub> <mo>,</mo><mtext> </mtext><msub> <mi>x</mi> <mn>2</mn> </msub> <mo>,</mo><mtext> </mtext><mtext> </mtext><mo>…</mo><mtext> </mtext><mtext> </mtext><mtext> </mtext><msub> <mi>x</mi> <mi>n</mi> </msub> </mrow> <annotation encoding='MathType-MTEF'>MathType@MTEF@5@5@+= feaagKart1ev2aqatCvAUfeBSjuyZL2yd9gzLbvyNv2CaerbbjxAHX garuavP1wzZbItLDhis9wBH5garmWu51MyVXgarqqtubsr4rNCHbGe aGqipG0dh9qqWrVepG0dbbL8F4rqqrVepeea0xe9LqFf0xc9q8qqaq Fn0lXdHiVcFbIOFHK8Feea0dXdar=Jb9hs0dXdHuk9fr=xfr=xfrpe WZqaaeGaciWaamGadaGadeaabaGaaqaaaOqaaiaadIhadaWgaaWcba GaaGymaaqabaGccaGGSaGaaGjbVlaadIhadaWgaaWcbaGaaGOmaaqa baGccaGGSaGaaGjbVlaaykW7cqWIMaYscaaMc8UaaGPaVlaaysW7ca WG4bWaaSbaaSqaaiaad6gaaeqaaaaa@4713@ </annotation> </semantics> </math>
     INPUT
-    x_1, x_2, ... x_n
+    x_1 , x_2 , ... x_n
     OUTPUT
   end
 
-  it 'processes some unknown MathML' do
-    expect(MathML2AsciiMath.m2a(<<~INPUT)).to match_fuzzy <<~OUTPUT
+  it 'processes unknown MathML' do
+    expect(MathML2AsciiMath.m2a(<<~INPUT)).to eq <<~OUTPUT.strip
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <mrow>
         <mi> x </mi>
@@ -415,7 +415,10 @@ RSpec.describe MathML2AsciiMath do
       </mrow>
     </math>
     INPUT
-    x + <mphantom>\n<mi> y </mi>\n<mo> + </mo>\n</mphantom> z
+    x + <math xmlns="http://www.w3.org/1998/Math/MathML"><mphantom>
+     <mi> y </mi>
+     <mo> + </mo>
+    </mphantom></math> z
     OUTPUT
   end
 
