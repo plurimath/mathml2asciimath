@@ -5,10 +5,11 @@ require "pp"
 module MathML2AsciiMath
 
   def self.m2a(x)
-    docxml = Nokogiri::XML(x)
-    parse(docxml.root).gsub(/  /, " ").
-      sub(/^\s+/, "").
-      sub(/\s+$/, "")
+    docxml = Nokogiri::XML.parse(x) do |config|
+      config.noblanks
+    end
+
+    parse(docxml.root).gsub(/  /, " ").strip
   end
 
   def self.encodechars(x)
