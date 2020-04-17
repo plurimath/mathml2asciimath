@@ -1,6 +1,6 @@
-require "mathml2asciimath"
+require 'mathml2asciimath'
 
-STDIN.set_encoding("UTF-8")
+STDIN.set_encoding('UTF-8')
 while a = gets
   matches = a.split(%r{(<math.*?</math>)})
   out = ''
