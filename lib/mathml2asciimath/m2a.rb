@@ -5,11 +5,8 @@ require "pp"
 module MathML2AsciiMath
 
   def self.m2a(x)
-    docxml = Nokogiri::XML.parse(x) do |config|
-      config.noblanks
-    end
-
-    parse(docxml.root).gsub(/  /, " ").strip
+    docxml = Nokogiri::XML.parse(x, &:noblanks)
+    parse(docxml.root).gsub(/  /, ' ').strip
   end
 
   def self.encodechars(x)
@@ -157,35 +154,35 @@ module MathML2AsciiMath
       gsub(/\u21a6/, "|->").
       gsub(/\u2026/, "...").
       gsub(/\u2212/, "-").
-      gsub(/\u2061/, ""). # function application
+      gsub(/\u2061/, ''). # function application
       gsub(/\u2751/, "square")
   end
 
   def self.parse(node)
-    out = ""
+    out = ''
     if node.text?
       return encodechars(HTMLEntities.new.decode(node.text))
     end
 
-    case node.name.sub(/^[^:]*:/, "")
+    case node.name.sub(/^[^:]*:/, '')
     when "math"
       outarr = []
       node.elements.each { |n| outarr << parse(n).strip }
-      return outarr.join(" ")
+      return outarr.join(' ')
 
     when "annotation"
-      return ""
+      return ''
 
     when "semantics"
       outarr = []
       node.elements.each { |n| outarr << parse(n).strip }
-      return outarr.join(" ")
+      return outarr.join(' ')
 
     when "mrow"
       outarr = []
       node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(" ")
-      if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, "")
+      out = outarr.join(' ')
+      if %w{mfrac msub munder munderover}.include? node.parent.name.sub(/^[^:]*:/, '')
         out = "(#{out})"
       end
       return out
@@ -202,7 +199,7 @@ module MathML2AsciiMath
     when "msqrt"
       outarr = []
       node.elements.each { |n| outarr << parse(n).strip }
-      return "sqrt(#{outarr.join(" ")})"
+      return "sqrt(#{outarr.join(' ')})"
 
     when "mfrac"
       return "(#{parse(node.elements[0])})/(#{parse(node.elements[1])})"
@@ -210,13 +207,13 @@ module MathML2AsciiMath
     when "msup"
       sup = parse(node.elements[1])
       sup = "(#{sup})" unless sup.length == 1
-      op = parse(node.elements[0]).gsub(/ $/, "")
+      op = parse(node.elements[0]).gsub(/ $/, '')
       return "#{op}^#{sup}"
 
     when "msub"
       sub = parse(node.elements[1])
       sub = "(#{sub})" unless sub.length == 1
-      op = parse(node.elements[0]).gsub(/ $/, "")
+      op = parse(node.elements[0]).gsub(/ $/, '')
       return "#{op}_#{sub}"
 
     when "munderover", "msubsup"
@@ -224,24 +221,26 @@ module MathML2AsciiMath
       sub = "(#{sub})" unless sub.length == 1
       sup = parse(node.elements[2])
       sup = "(#{sup})" unless sup.length == 1
-      op = parse(node.elements[0]).gsub(/ $/, "")
+      op = parse(node.elements[0]).gsub(/ $/, '')
       return "#{op}_#{sub}^#{sup}"
 
     when "munder"
-      elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
+      elem1 = parse(node.elements[1]).sub(/^\s+/, '').sub(/\s+$/, '')
       accent = case elem1
                when "\u0332" then "ul"
                when "\u23df" then "ubrace"
                else
                  "underset"
                end
+
       if accent == "underset"
         return "underset(#{elem1})(#{parse(node.elements[0])})"
       else
         return "#{accent} #{parse(node.elements[0])}"
       end
+
     when "mover"
-      elem1 = parse(node.elements[1]).sub(/^\s+/, "").sub(/\s+$/, "")
+      elem1 = parse(node.elements[1]).sub(/^\s+/, '').sub(/\s+$/, '')
       accent = case elem1
                when "\u005e" then "hat"
                when "\u00af" then "bar"
@@ -253,6 +252,7 @@ module MathML2AsciiMath
                else
                  "overset"
                end
+
       if accent == "overset"
         return "overset(#{elem1})(#{parse(node.elements[0])})"
       else
@@ -277,27 +277,28 @@ module MathML2AsciiMath
     when "mn", "mtext"
       outarr = []
       node.children.each { |n| outarr << parse(n).strip }
-      return "#{outarr.join("")}"
+      return "#{outarr.join('')}"
 
     when "mi"
       # mi is not meant to have space around it, but Word is conflating operators and operands
       outarr = []
       node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(" ")
+      out = outarr.join(' ')
       out = " #{out} " if /[^a-zA-Z0-9',]|[a-z][a-z]/.match out
       return out
 
     when "mo"
       outarr = []
       node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(" ")
+      out = outarr.join(' ')
       out = " #{out} " unless node["fence"]
       return out
 
     when "mstyle"
       outarr = []
       node.children.each { |n| outarr << parse(n).strip }
-      out = outarr.join(" ")
+      return outarr.join(' ')
+
     else
       node.to_xml
 
