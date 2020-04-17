@@ -72,7 +72,7 @@ RSpec.describe MathML2AsciiMath do
       </munderover>
     </math>
     INPUT
-    \u222B_0^(oo)
+    int_0^(oo)
     OUTPUT
   end
 
@@ -86,7 +86,7 @@ RSpec.describe MathML2AsciiMath do
       </msubsup>
     </math>
     INPUT
-    \u222B_(ab)^(ds)
+    int_(ab)^(ds)
     OUTPUT
   end
 

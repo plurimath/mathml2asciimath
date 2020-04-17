@@ -114,7 +114,7 @@ module MathML2AsciiMath
       gsub(/\u27e8/, '<<').
       gsub(/\u232a/, '>>').
       gsub(/\u27e9/, '>>').
-      gsub(/\u222b/, 'int')
+      gsub(/\u222b/, 'int').
       gsub(/\u222e/, 'oint').
       gsub(/\u2202/, 'del').
       gsub(/\u2207/, 'grad').
