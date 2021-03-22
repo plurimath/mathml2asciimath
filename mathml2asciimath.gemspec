@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     This gem is in active development.
   DESCRIPTION
 
-  spec.homepage      = "https://github.com/metanorma/mathml2asciimath"
+  spec.homepage      = "https://github.com/plurimath/mathml2asciimath"
   spec.license       = "BSD-2-Clause"
 
   spec.bindir        = "bin"
