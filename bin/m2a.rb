@@ -1,17 +1,15 @@
-require 'mathml2asciimath'
+require "mathml2asciimath"
 
-STDIN.set_encoding('UTF-8')
+STDIN.set_encoding("UTF-8")
 while a = gets
   matches = a.split(%r{(<math.*?</math>)})
-  out = ''
+  out = ""
   matches.each do |x|
-    if /<math/.match x
-      out += MathML2AsciiMath.m2a(x)
-    else
-      out += x
-    end
+    out += if /<math/.match? x
+             MathML2AsciiMath.m2a(x)
+           else
+             x
+           end
   end
   print out
 end
-
-
