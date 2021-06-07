@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
 
   spec.add_dependency "htmlentities", "~> 4.3.4"
-  spec.add_dependency "nokogiri", "~> 1.10.4"
+  spec.add_dependency "nokogiri", "~> 1.11"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "byebug", "~> 9.1"
