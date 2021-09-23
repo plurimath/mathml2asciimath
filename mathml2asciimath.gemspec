@@ -24,10 +24,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.files         = `git ls-files`.split("\n")
   spec.test_files    = `git ls-files -- {spec}/*`.split("\n")
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
   spec.add_dependency "htmlentities", "~> 4.3.4"
-  spec.add_dependency "nokogiri", "~> 1.11"
+  spec.add_dependency "nokogiri", "~> 1.12"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "byebug", "~> 9.1"
