@@ -1,3 +1,30 @@
+## RETIRED — superseded by Plurimath
+
+This repository was archived on 2026-11-02 and is no longer maintained. Its
+functionality — converting MathML to AsciiMath — is fully subsumed by
+https://github.com/plurimath/plurimath[Plurimath], which reads MathML
+natively and writes every math format, including AsciiMath.
+
+Gem usage:
+
+[source,ruby]
+----
+require "plurimath"
+
+formula = Plurimath::Math.parse("<math><mfrac><mi>a</mi><mi>b</mi></mfrac></math>", :mathml)
+formula.to_asciimath  # => "frac(a)(b)"
+----
+
+CLI usage:
+
+[source,sh]
+----
+plurimath convert --input-format mathml --output-format asciimath \
+  --input "<math><mfrac><mi>a</mi><mi>b</mi></mfrac></math>"
+----
+
+Documentation: the formal specifications for every supported format live at
+https://plurimath.github.io/docs/ .
 ## DEPRECATION NOTICE: This repository is no longer maintained. Please visit link:https://github.com/plurimath/plurimath[Plurimath] for the latest updates and features.
 
 = mathml2asciimath
